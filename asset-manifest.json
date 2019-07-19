@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ChattingSocket/static/css/main.71bd86f1.chunk.css",
+    "main.js": "/ChattingSocket/static/js/main.24d50f33.chunk.js",
+    "main.js.map": "/ChattingSocket/static/js/main.24d50f33.chunk.js.map",
+    "runtime~main.js": "/ChattingSocket/static/js/runtime~main.7f9685b7.js",
+    "runtime~main.js.map": "/ChattingSocket/static/js/runtime~main.7f9685b7.js.map",
+    "static/js/2.4cce7852.chunk.js": "/ChattingSocket/static/js/2.4cce7852.chunk.js",
+    "static/js/2.4cce7852.chunk.js.map": "/ChattingSocket/static/js/2.4cce7852.chunk.js.map",
+    "index.html": "/ChattingSocket/index.html",
+    "precache-manifest.91bda0ccf8440758db992d8b2176604f.js": "/ChattingSocket/precache-manifest.91bda0ccf8440758db992d8b2176604f.js",
+    "service-worker.js": "/ChattingSocket/service-worker.js",
+    "static/css/main.71bd86f1.chunk.css.map": "/ChattingSocket/static/css/main.71bd86f1.chunk.css.map"
+  }
+}
