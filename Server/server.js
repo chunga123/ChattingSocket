@@ -1,70 +1,61 @@
-// var app = require('express')();
-// var http = require('http').createServer(app);
-// var io = require('socket.io')(http);
-// let data = [];
-// io.on('connection', function(socket) {
-//     console.log('a user connected ');
-//     socket.on('disconnect', function() {
-//         console.log("Users Disconnect DKM !!");
-//     });
-//     socket.on('chat message', function(msg) {
-//         io.emit('chat message', msg);
-//     });
-//     socket.on('Create Room', function(a) {
-//         io.emit("Recive Room", a);
-//     });
+const app = require('express')();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+let data = [];
+const mongoCilent = require("mongodb").MongoClient;
+let errs = (err) => {
+    if (err) { return err } else {
+        return "success!";
+    }
+}
+let dbo = null;
 
-// });
-
-// http.listen(5000, function() {
-//     console.log('listening on *:5000');
-// });
-// var express = require('express');
-// var socket = require('socket.io');
-
-// var app = express();
-
-
-// let server = app.listen(5000, function() {
-//     console.log('server is running on port 5000')
-// });
-
-// let io = socket(server);
-
-// io.on('connection', (socket) => {
-//     console.log(socket.id);
-
-//     socket.on('SEND_MESSAGE', function(data) {
-//         io.emit('RECEIVE_MESSAGE', data);
-//     })
-// });
-const express = require('express')
-const http = require('http')
-const socketIO = require('socket.io')
-
-// our localhost port
-const port = 4001;
-
-const app = express()
-
-// our server instance
-const server = http.createServer(app)
-
-// This creates our socket using the instance of the server
-const io = socketIO(server)
-
-// This is what the socket.io syntax is like, we will work this later
-io.on('connection', socket => {
-    console.log('New client connected')
-    socket.on('disconnect', () => {
-        console.log('user disconnected')
-    })
-    socket.on('chat message', function(msg) {
-        io.emit('send message', msg);
-    });
-    socket.on('Create Room', function(a) {
-        io.emit("Recive Room", a);
-    });
+mongoCilent.connect("mongodb://localhost:27017/", (err, db) => {
+    console.log(errs(err));
+    dbo = db.db("messages");
 })
 
-server.listen(port, () => console.log(`Listening on port ${port}`))
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
+
+io.on('connection', function(socket) {
+
+    console.log('a user connected ');
+    socket.on('disconnect', function() {
+        console.log("Users Disconnect DKM !!");
+
+    });
+
+    socket.on('SEND_MESSAGE', function(msg) {
+        console.log("~~" + msg + "~~");
+        dbo.collection("MessageData").insertOne({
+            avatar: msg.avatar,
+            author: msg.author,
+            message: msg.message,
+            time: msg.time
+        }, (err) => {
+            errs(err);
+        })
+
+
+        io.emit('RECEIVE_MESSAGE', msg);
+    });
+
+    socket.on('Get Data', function(a) {
+        console.log('====================================');
+        console.log("get Data");
+        console.log('====================================');
+        dbo.collection("MessageData").find({}).toArray((err, data) => {
+            errs(err);
+
+            io.emit("Recive Data", data);
+
+        })
+    });
+
+});
+
+http.listen(4001, function() {
+    console.log('listening on *:4001');
+});

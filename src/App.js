@@ -5,13 +5,16 @@ import RegisterForm from './Components/RegisterForm';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Home from 'D:/REACT-APP/review-react/src/Components/Home.js';
 import Blog from 'D:/REACT-APP/review-react/src/Components/Blog.js';
+import Setting from 'D:/REACT-APP/review-react/src/Components/Setting.js'
 import Chatting from 'D:/REACT-APP/review-react/src/Components/Chatting.js';
-
+import io from "socket.io-client";
 class App extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+          socket:io("localhost:4001"),
+          CheckTooken:null,
             Users: [
             ],
             getData: 0,
@@ -43,11 +46,22 @@ class App extends Component {
         }
         //? ==================================================================
     componentWillMount() {
-            let Data = JSON.parse(localStorage.getItem("Users"));
-            this.setState({ Users: Data,getData:localStorage.Tooken });
-            
+      // ========================Recive Data
+               let Data = JSON.parse(localStorage.getItem("Users"));
+      this.setState({ Users: Data, getData: localStorage.Tooken });
+               // ? if tooken == null => show log up
+               // ! else => show avtar (know tooken) 
+               //==============Check Log Up=================
+               let {Tooken}=localStorage;
+               if(Tooken == null && Tooken){
+                 //localStorage.setItem("Tooken",this.state.CheckTooken);
+                 this.setState({CheckTooken:null});
+               }
+               else{
+                 this.setState({ CheckTooken:true });
+               }
         }
-        // !====================================================================
+        // !=================radom id ===================================================
     s4 = () => {
             return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         }
@@ -57,6 +71,7 @@ class App extends Component {
         }
         // !==========================================================================SETAVATAR() RUN WHEN USER CLICK TO AVATAR IMG
     setAva = () => {
+      //SetAvatar
             document.getElementById("rowFake").className = "row FUCK";
 
         }
@@ -109,84 +124,98 @@ class App extends Component {
             console.log("asdf");
             console.log('====================================');
       }
+      OnSumitform=(err)=>{
+        
+      }
+  CheckTooken = () => {
+        if(this.state.CheckTooken != true){
+          return (
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <Link to="/LoginForm"><span class="glyphicon glyphicon-user"></span>Sign Up</Link>
+              </li>
+              <li>
+                <Link to="/RegisterForm"><span class="glyphicon glyphicon-log-in"></span> Logup Acount </Link>
+              </li>
+            </ul>
+          );
+        }
+        else{
+          return (
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <span className="label label-info">{
+                  JSON.parse(localStorage.getItem("Users"))[localStorage.getItem("Tooken")].Name
+                } </span>
+              </li>
+
+              <li> <img onClick={this.setAva}
+                src={JSON.parse(localStorage.getItem("Users"))[localStorage.getItem("Tooken")].Avatar}
+                className="img-responsive" />
+              </li>
+            </ul>
+
+          );
+        }
+
+      }
       
         //========================================================================================
     render() {
             return (
-           <div>
-                    <Router>
-  <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <nav className="navbar navbar-default" role="navigation">
 
-      <div className="navbar-header">
-        <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-          <span className="sr-only"> Toggle navigation </span>
-          <span className="icon-bar"> </span>
-          <span className="icon-bar"> </span>
-          <span className="icon-bar"> </span>
-        </button>
-        </div>
+<div>
+  <Router>
+              <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                  <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">WebSiteName</a>
+                  </div>
+                  <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li> <Link to="/">Home</Link></li>
+         <li> <Link to = "/Blog"> Blog </Link></li>
+                          <li> <Link to="/Setting"> Setting </Link></li>
+           <li> <Link to="/Chatting"> Chatting </Link></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                      {
+                        this.CheckTooken()
+                      }
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+                  <div className="row FAKE" id="rowFake">
+     <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                       <div className="form-group">
+                         <input onChange={this.OnSetAvatar} type="text" className="form-control" placeholder="Link Your Avatar" />
+                       </div>
+     </div>
 
-      <div className="collapse navbar-collapse navbar-ex1-collapse">
-          
-        <ul className="nav navbar-nav">
-          <li className="active"> <Link to = "/">Home</Link></li>
-          <li> <Link to = "/Blog"> Blog </Link></li>
-          <li> <Link to = "/LoginForm" > Login Form</Link></li>
-          <li> <Link to = "/RegisterForm"> Logup Acount </Link></li>
-          <li> <Link to="/Chatting"> Chatting </Link></li>
-        </ul>
+     <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+       <button onClick={ this.onSubmitAvatar } className="btn btn-default">
+         Submit
+         </button>
+     </div>
 
-        <form className="navbar-form navbar-left" role="search">  
-          <div className="form-group">
-            <input onChange={this.test} type="text" className="form-control" placeholder="Search" />
-          </div> 
-          <button type="submit" className="btn btn-default"> Submit </button> 
-        </form>
+   </div>
+                <Route path="/Chatting" render={() => (<Chatting />)} />
+                  <Route path="/Setting" render={() => (<Setting Check={this.state.Check} onClickSubmit={this.onClickSubmit} />)} />
+                     <Route path="/Blog" render={() => (<Blog />)} />
+                     <Route path="/RegisterForm" render={() => (< RegisterForm onSubmitForm={this.onSubmitForm} />)} />
+                     <Route path="/LoginForm" render={() => (<LoginForm Check={this.state.Check} onClickSubmit={this.onClickSubmit} />)} />
+                     <Route path="/" component={Home} render={() => (< Home />)} exact />
+                     </Router>
 
-        <ul className="nav navbar-nav navbar-right">
-          <li>
-            <span className="label label-info">{ this.state.Users[localStorage.getItem('Tooken')].Name } </span> 
-          </li>
-
-          <li> <img onClick={ this.setAva } src={ this.state.Users[localStorage.getItem('Tooken')].Avatar} className="img-responsive"/></li> 
-          <li> <Link to = "/">Link</Link></li>
-
-          <li className="dropdown">
-            <a className="dropdown-toggle" data-toggle="dropdown"> Dropdown <b className="caret"></b></a>
-            </li>
-            <ul className="dropdown-menu">
-              <li> <Link to="/"> Action </Link></li>
-              <li> <Link to="/"> Another action </Link></li>
-              <li> <Link to="/"> Something </Link> </li>
-              <li> <Link to="/">Separated link </Link> </li>
-            </ul>
-        </ul>
-    </div>
-    </nav>
-  </div>
-
-  <div className="row FAKE" id="rowFake">
-    <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                      <div className="form-group">
-                        <input onChange={this.OnSetAvatar} type="text" className="form-control" placeholder="Link Your Avatar" />
-                      </div> 
-    </div>
-
-    <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-      <button onClick={ this.onSubmitAvatar } className="btn btn-default">Submit </button>
-    </div>
-
-  </div>
-                    <Route path="/Chatting" render={() => (<Chatting />)} />
-                    <Route path="/Blog" render={() => (<Blog />)} />
-                    <Route path="/RegisterForm" render={() => (< RegisterForm onSubmitForm={this.onSubmitForm} />)} />
-                    <Route path="/LoginForm" render={() => (<LoginForm Check={this.state.Check} onClickSubmit={this.onClickSubmit} />)} />
-                    <Route path="/" component={Home} render={() => (< Home />)} exact />
-                    </Router>
 </div>
+
                                 );
                             }
-                        }
-
+                          }
                         export default App;

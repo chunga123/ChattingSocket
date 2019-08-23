@@ -2,9 +2,11 @@
     "name": "review-react",
     "version": "0.1.0",
     "private": true,
+    "homepage": "https://yourusername.github.io/hello"
     "dependencies": {
         "@pusher/chatkit-client": "^1.8.0",
         "bootstrap": "^4.3.1",
+        "gh-pages": "^2.0.1",
         "jquery": "^3.4.1",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
@@ -16,6 +18,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
@@ -36,4 +40,5 @@
     "devDependencies": {
         "index-html": "^1.0.5"
     }
+
 }
