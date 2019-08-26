@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import LoginForm from 'D:/REACT-APP/review-react/src/Components/LoginForm.js';
+import LoginForm from 'D:/REACT-APP/chatting/src/Components/LoginForm.js';
 class Setting extends Component {
     constructor(props) {
         super(props);

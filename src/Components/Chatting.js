@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import io from "socket.io-client";
 import $ from 'jquery';
 
-import "D:/REACT-APP/review-react/src/Css/Chattting.css"
+import "D:/REACT-APP/chatting/src/Css/Chattting.css"
  class Chatting extends Component {
 
    constructor(props) {
@@ -18,9 +18,6 @@ import "D:/REACT-APP/review-react/src/Css/Chattting.css"
      this.socket = io("localhost:4001");
 
      this.socket.on("RECEIVE_MESSAGE",(data)=>{
-       console.log('====================================');
-       console.log(data);
-       console.log('====================================');
        let { MESSAGE_DATA } = this.state;
 
        MESSAGE_DATA.push(data);
@@ -51,13 +48,10 @@ import "D:/REACT-APP/review-react/src/Css/Chattting.css"
        avatar:User.Avatar
      });
      
-     console.log(this.state.author + "hellosss");
      this.state.socket.emit("Get Data", "ngu");
 
      this.state.socket.on("Recive Data", (data) => {
        this.setState({ MESSAGE_DATA: data });
-       console.log(data);
-
      })
    }
     render() {
@@ -74,14 +68,14 @@ import "D:/REACT-APP/review-react/src/Css/Chattting.css"
                           <div className="row msg_container base_sent">
                             <div className="col-md-10 col-xs-10">
                               <div className="messages msg_sent">
-                                <p><img
+                                <p><img src={this.state.Avatar}
                                  className="AvatarChatting"
                                 src={message.avatar}/><b>{message.author} : </b> {message.message}</p>
                                 <time dateTime="2009-11-13T20:00">{message.time}</time>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> 
                       );
                     })}
                   </div>

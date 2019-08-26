@@ -2,7 +2,7 @@
     "name": "review-react",
     "version": "0.1.0",
     "private": true,
-    "homepage": "https://yourusername.github.io/hello"
+    "homepage": "https://chunga123.github.io/ChattingSocket",
     "dependencies": {
         "@pusher/chatkit-client": "^1.8.0",
         "bootstrap": "^4.3.1",

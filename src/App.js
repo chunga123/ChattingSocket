@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import LoginForm from 'D:/REACT-APP/review-react/src/Components/LoginForm.js';
+import LoginForm from 'D:/REACT-APP/chatting/src/Components/LoginForm.js';
 import RegisterForm from './Components/RegisterForm';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Home from 'D:/REACT-APP/review-react/src/Components/Home.js';
-import Blog from 'D:/REACT-APP/review-react/src/Components/Blog.js';
-import Setting from 'D:/REACT-APP/review-react/src/Components/Setting.js'
-import Chatting from 'D:/REACT-APP/review-react/src/Components/Chatting.js';
+import Home from 'D:/REACT-APP/chatting/src/Components/Home.js';
+import Blog from 'D:/REACT-APP/chatting/src/Components/Blog.js';
+import Setting from 'D:/REACT-APP/chatting/src/Components/Setting.js'
+import Chatting from 'D:/REACT-APP/chatting/src/Components/Chatting.js';
 import io from "socket.io-client";
 class App extends Component {
 
